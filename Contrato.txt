@@ -1,0 +1,167 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'CasoPractico_FakeApiStore_Jolaus Andy Meza Perez'
+  description: 'Especificación OpenAPI 2.0.'
+host: fakestoreapi.com
+basePath: /
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - 1. Autenticacion
+      summary: Login API - Generar Token JWT
+      description: Autentica un usuario de prueba y devuelve un token de acceso.
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/LoginRequest'
+      responses:
+        '200':
+          description: Login exitoso
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '401':
+          description: Credenciales incorrectas
+
+  /products:
+    post:
+      tags:
+        - 2. Productos
+      summary: POST - Crear nuevo producto
+      description: Registra un nuevo producto en el catálogo de la tienda.
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProductInput'
+      responses:
+        '200':
+          description: Producto creado exitosamente
+          schema:
+            $ref: '#/definitions/Product'
+
+  /products/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID único del producto (1 al 20)
+        required: true
+        type: integer
+        default: 1
+    get:
+      tags:
+        - 2. Productos
+      summary: GET - Consultar producto por ID
+      description: Obtiene el detalle completo de un producto específico.
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/Product'
+        '404':
+          description: Producto no encontrado
+    put:
+      tags:
+        - 2. Productos
+      summary: PUT - Actualizar producto existente
+      description: Actualiza el título, precio, descripción o categoría de un producto por su ID.
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProductInput'
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+          schema:
+            $ref: '#/definitions/Product'
+    delete:
+      tags:
+        - 2. Productos
+      summary: DELETE - Eliminar producto por ID
+      description: Elimina un producto del catálogo indicando su ID.
+      responses:
+        '200':
+          description: Producto eliminado correctamente
+          schema:
+            $ref: '#/definitions/Product'
+
+definitions:
+  LoginRequest:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        example: mor_2314
+      password:
+        type: string
+        example: 83r5^_
+
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+  ProductInput:
+    type: object
+    required:
+      - title
+      - price
+      - description
+      - image
+      - category
+    properties:
+      title:
+        type: string
+        example: Monitor Gamer Curvo 27 Pulgadas
+      price:
+        type: number
+        example: 899.90
+      description:
+        type: string
+        example: Monitor Full HD 165Hz 1ms
+      image:
+        type: string
+        example: https://i.pravatar.cc
+      category:
+        type: string
+        example: electronics
+
+  Product:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      title:
+        type: string
+        example: Monitor Gamer Curvo 27 Pulgadas
+      price:
+        type: number
+        example: 899.90
+      description:
+        type: string
+        example: Monitor Full HD 165Hz 1ms
+      category:
+        type: string
+        example: electronics
+      image:
+        type: string
+        example: https://i.pravatar.cc
